@@ -1,10 +1,10 @@
 from django.contrib import admin
 from django.urls import path
-from .views import index_html,create_html,detail_html,delete_html
+from .views import indexx,create,delete
 
 urlpatterns = [
-    path('', index_html ),
-    path('create/', create_html),
-    path('detail/<int:pro_id>', detail_html),
-    path('delete/<int:pro_id>', delete_html)
+    path('', indexx, name='index'),
+    path('create', create, name = 'create'),
+    path('delete/<int:c_id>/', delete, name='delete')
+
 ]

@@ -1,14 +1,22 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Index.html</title>
-        {%for product in products%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index HTML </title>
+</head>
+<body>
+    <h2><a href="{% url 'create' %}">Add Customer </a></h2>
+    <hr>
+    {% for cus in customers %}
+        <h3>{{cus.last_name}} | {{cus.first_name}}</h3>
+        <a href="{% url 'delete' cus.id %}">Delete</a>
         <hr>
-            <h2>{{product}}</h2>
 
-            {%endfor%}
-    </head>
-    <body>
-        
-    </body>
+
+
+
+    {% endfor %}
+    
+</body>
 </html>
