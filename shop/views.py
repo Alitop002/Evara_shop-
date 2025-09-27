@@ -1,7 +1,14 @@
 from django.shortcuts import render
+from shop.models import Category,Product
 
 def dahsboard(request):
-    return render(request, "shop/index.html")
+    categories = Category.objects.all()
+    produtcs = Product.objects.all()
+    data = {
+        "categories": categories,
+        "produtcs":produtcs
+        }
+    return render(request, "shop/index.html", context=data)
 
 
 def detail(request):
@@ -27,3 +34,5 @@ def shop(request):
 
 def wishilst(request):
     return render(request, "shop/wishlist.html")
+
+
