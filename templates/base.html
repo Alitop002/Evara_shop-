@@ -25,20 +25,25 @@
   <body>
     <!--=============== HEADER ===============-->
     <header class="header">
-      <div class="header__top">
-        <div class="header__container container">
-          <div class="header__contact">
-            <span>(+01) - 2345 - 6789</span>
-            <span>Our location</span>
+      {% if not request.user.is_authenticated %}
+        <div class="header__top">
+          <div class="header__container container">
+            <div class="header__contact">
+              <span>(+998)-94-982-80-09</span>
+              <span>Bizning lokatsiyamiz</span>
+            </div>
+            <p class="header__alert-news">
+              Eng arzon mahsolotlar - faqat bizda!
+            </p>
+            <a href="{% url "login" %}" class="header__top-action">
+              Log in /
+            </a>
+            <a href="{% url "login" %}" class="header__top-action">
+              Sign in 
+            </a>
           </div>
-          <p class="header__alert-news">
-            Super Values Deals - Save more coupons
-          </p>
-          <a href="login-register.html" class="header__top-action">
-            Log In / Sign Up
-          </a>
         </div>
-      </div>
+      {% endif %}
 
       <nav class="nav container">
         <a href="index.html" class="nav__logo">
@@ -59,25 +64,27 @@
           </div>
           <ul class="nav__list">
             <li class="nav__item">
-              <a href="index.html" class="nav__link active-link">Home</a>
+              <a href="{% url 'dashboard' %}" class="nav__link {% if request.path == '/' %} active-link {% endif %}">Bosh sahifa</a>
             </li>
             <li class="nav__item">
-              <a href="shop.html" class="nav__link">Shop</a>
+              <a href="{% url 'shop' %}" class="nav__link {% if request.path == '/shop/' %} active-link {% endif %}">Mahsulotlar</a>
             </li>
             <li class="nav__item">
-              <a href="accounts.html" class="nav__link">My Account</a>
+              <a href="{% url 'accounts' %}" class="nav__link {% if request.path == '/profile/' %} active-link {% endif %}">Profilim</a>
             </li>
             <li class="nav__item">
-              <a href="compare.html" class="nav__link">Compare</a>
+              <a href="{% url 'compare' %}" class="nav__link">Compare</a>
             </li>
+          {% if request.user.is_authenticated  %}
             <li class="nav__item">
-              <a href="login-register.html" class="nav__link">Login</a>
+              <a href="{% url 'logout' %}" class="nav__link">Log Out</a>
             </li>
+          {% endif %}
           </ul>
           <div class="header__search">
             <input
               type="text"
-              placeholder="Search For Items..."
+              placeholder="Mahsulotlar ichidan qidirish..."
               class="form__input"
             />
             <button class="search__btn">
