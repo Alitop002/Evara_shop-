@@ -1,7 +1,7 @@
 {% load static %}
 <section class="products container section--lg">
 
-    {% if products %}
+  {% if products %}
         <p class="total__products">
             Umumiy mahsulotlar soni <span>{{ products.count }}</span> ta!
         </p>
@@ -49,10 +49,12 @@
                       <i class="fi fi-rs-star"></i>
                     </div>
                     <div class="product__price flex">
-
-                        <span class="new__price">$200</span>
-                        <span class="old__price">$250</span>
-
+                        {% if product.discount_price %}
+                            <span class="new__price">${{ product.discount_price }}</span>
+                            <span class="old__price">${{ product.price }}</span>
+                        {% else %}
+                            <span class="new__price">${{ product.price }}</span>
+                        {% endif %}
                     </div>
                     <a
                       href="#"
@@ -66,17 +68,20 @@
         {% endfor %}
         </div>
 
-        <!-- Пагинация -->
-        <ul class="pagination">
-          <li><a href="#" class="pagination__link active">01</a></li>
-          <li><a href="#" class="pagination__link">02</a></li>
-          <li><a href="#" class="pagination__link">03</a></li>
-          <li><a href="#" class="pagination__link">...</a></li>
-          <li><a href="#" class="pagination__link">16</a></li>
-          <li><a href="#" class="pagination__link icon">
-            <i class="fi-rs-angle-double-small-right"></i>
-          </a></li>
-        </ul>
+          <!-- Pagination -->
+          <ul class="pagination">
+              {% if products.has_previous %}
+                  <li><a href="?page={{products.previous_page_number}}" class="pagination__link"><</a></li> 
+              {% endif %}
+
+              {% for page in products.paginator.page_range %}
+                  <li><a href="?page={{page}}" class="pagination__link " {% if products.number == page %}active{% endif %}>{{page}}</a></li>
+              {% endfor %}
+
+              {% if products.has_next %}
+                  <li><a href="?page={{products.next_page_number}}" class="pagination__link ">></a></li>
+              {% endif %}
+          </ul>
 
       {% else %}
         <!-- Если товаров нет -->
@@ -85,7 +90,7 @@
             <h2 style="font-size: 24px;">Mahsulotlar mavjud emas!</h2>
             <p style="color: #888;">Iltimos, boshqa kategoriyani tanlang yoki keyinroq urinib ko‘ring.</p>
         </div>
-    {% endif %}
+  {% endif %}
 
 
 </section>

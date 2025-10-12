@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
 
+
 def dahsboard(request):
     categories = Category.objects.all()
     produtcs = Product.objects.all()
@@ -46,9 +47,15 @@ def login_reg(request):
 
 def shop(request):
     products = Product.objects.all()
+    paginator = Paginator(products, 2)
+
+    page = request.GET.get('page')
+
+    page_products = paginator.get_page(page)
+
 
     data = {'path': 'Mahsulotlar',
-            'products':products
+            'products': page_products
             }
     return render(request, "shop/shop.html", context=data)
 
