@@ -1,8 +1,11 @@
 from django.shortcuts import redirect, render,get_object_or_404
 from shop.models import Category,Product
 from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from .forms import RegisterForm, LoginForm
+
 
 
 
@@ -35,14 +38,22 @@ def compare(request):
     return render(request, "shop/compare.html", context=data)
 
 def login_reg(request):
-    data = {'path': 'Login'}
     if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request,user)
-            return redirect('dashboard')
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request,user)
+                return redirect('dashboard')
+            
+    form = LoginForm()
+        
+    data = {'path': 'Login',
+            'form': form
+            }
     return render(request, "shop/login-register.html", context=data)
 
 def shop(request):
@@ -75,3 +86,29 @@ def get_product_view_category(request, category_id):
         'products': products 
     }
     return render(request, "shop/category-product.html", context=data)    
+
+
+def register_user(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+
+        if form.is_valid():
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+
+            user = User(first_name=first_name, last_name=last_name, username=username, email=email)
+            user.set_password(password)
+            user.save()
+            return redirect('login')
+        
+        
+    form = RegisterForm()
+    data = {
+        'path': 'Register',
+        'form': form
+    }
+    return render(request, "shop/register.html", context=data)
+        
