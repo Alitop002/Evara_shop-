@@ -46,7 +46,7 @@
       {% endif %}
 
       <nav class="nav container">
-        <a href="index.html" class="nav__logo">
+        <a href="{% url 'dashboard' %}" class="nav__logo">
           <img
             class="nav__logo-img"
             src="{% static "assets/img/logo.svg" %}"
@@ -55,7 +55,7 @@
         </a>
         <div class="nav__menu" id="nav-menu">
           <div class="nav__menu-top">
-            <a href="index.html" class="nav__menu-logo">
+            <a href="{% url 'dashboard' %}" class="nav__menu-logo">
               <img src="{% static "./assets/img/logo.svg" %}" alt="">
             </a>
             <div class="nav__close" id="nav-close">
@@ -93,13 +93,13 @@
           </div>
         </div>
         <div class="header__user-actions">
-          <a href="wishlist.html" class="header__action-btn" title="Wishlist">
+          <a href="{% url 'wishlist' %}" class="header__action-btn" title="Wishlist">
             <img src="{% static "assets/img/icon-heart.svg" %}" alt="" />
             <span class="count">3</span>
           </a>
-          <a href="cart.html" class="header__action-btn" title="Cart">
+          <a href="{% url 'cart_page' %}" class="header__action-btn" title="Cart">
             <img src="{% static "assets/img/icon-cart.svg" %}" alt="" />
-            <span class="count">3</span>
+            <span class="count" id="cart_count">0</span>
           </a>
           <div class="header__action-btn nav__toggle" id="nav-toggle">
             <img src="{% static "./assets//img/menu-burger.svg" %}" alt="">
