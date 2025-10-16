@@ -1,6 +1,5 @@
 from django.urls import path
 from shop.views import dahsboard,detail,accounts,cart,checkout,compare,login_reg,shop,logout_view,get_product_view_category,register_user,cart_page,wishilst
-
 urlpatterns = [
     path('', dahsboard, name='dashboard'),
     path('detail/', detail, name='detail'),
@@ -15,6 +14,8 @@ urlpatterns = [
     path('register/', register_user, name='register'),
     path('getcart/', cart_page, name='cart_page'),
     path('wishlist/', wishilst, name='wishlist'),
+
+ 
 
 
 

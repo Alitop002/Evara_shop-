@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from shop.models import Category, Product
 from django.core.paginator import Paginator
 from .cart import Cart
-
+from django.db.models import Q
 
 
 def dahsboard(request):
@@ -31,16 +31,24 @@ def compare(request):
 
 def shop(request):
     products = Product.objects.all()
+
+    q = request.GET.get('q')
+    if q:
+        products = Product.objects.filter(Q(name__icontains=q) | Q(description__contains=q))
+
     paginator = Paginator(products, 2)
     cart = Cart(request)
     page = request.GET.get('page')
 
     page_products = paginator.get_page(page)
 
+   
+ 
 
-    data = {'path': 'Mahsulotlar',
+    data = {'path': 'Mahsulotlar', 
             'products': page_products,
-            'cart_count':cart.get_count()
+            'cart_count':cart.get_count(),
+            'count': products.count()
             }
     return render(request, "shop/shop.html", context=data)
 
@@ -54,3 +62,4 @@ def get_product_view_category(request, category_id):
     }
     return render(request, "shop/category-product.html", context=data)    
 
+   
