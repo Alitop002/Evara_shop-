@@ -31,14 +31,45 @@ class Cart:
     def get_count(self):
         return len(self.cart.keys())
     
+    def get_count_items(self):
+        return sum(self.cart.values())
     
     def get_products(self):
         products=[]
-        for pid in self.cart.keys():
-            products.append(Product.objects.get(id=pid))
+        total_with_discount = 0
+
+        for pid, quantity in self.cart.items():
+            pd = Product.objects.get(id=pid)
+            if pd.discount>0:
+                total = pd.discount_price*quantity
+
+            else:
+                total = pd.price*quantity
+            total_with_discount+=total 
+
+            product = {
+                "quantity": quantity,
+                "data": pd, 
+                "total": total
+            }
+            products.append(product)
+
+        total_price = 0
+        for product in products:
+            total_price += product['data'].price*product['quantity']
+
+        data = {
+            'products':products,
+            'total_price': total_price,
+            'total_with_discount': total_with_discount,
+            'profit': total_price-total_with_discount
+        }
+        return data
+    
+
+
             
-        return products
-            
+
 
                   
         
@@ -57,7 +88,10 @@ def cart_page(request):
     data = {
         'path':"Savatcha",
         'cart_count': cart.get_count(),
-        'products':products
+        'products':products,
+        'tot_items': cart.get_count_items()
     }
     return render(request,'shop/cart.html', context=data)
+
+
 

@@ -2132,3 +2132,26 @@ table {
     max-width: 270px;
   }
 }
+
+.header__auth {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.header__auth a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.header__auth a:hover {
+  color: #008080;
+}
+
+.header__auth span {
+  color: #888;
+}
+

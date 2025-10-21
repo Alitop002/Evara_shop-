@@ -20,10 +20,6 @@ def dahsboard(request):
 def detail(request):
     return render(request, "shop/details.html")
 
-
-def checkout(request):
-    return render(request, "shop/checkout.html")
-
 def compare(request):
     data = {'path': 'Compare'}
     return render(request, "shop/compare.html", context=data)

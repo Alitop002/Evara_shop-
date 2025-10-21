@@ -35,12 +35,12 @@
             <p class="header__alert-news">
               Eng arzon mahsolotlar - faqat bizda!
             </p>
-            <a href="{% url "login" %}" class="header__top-action">
-              Log in /
-            </a>
-            <a href="{% url "login" %}" class="header__top-action">
-              Sign in 
-            </a>
+            <div class="header__auth">
+              <a href="{% url 'login' %}">Log in</a>
+              <span>/</span>
+              <a href="{% url 'login' %}">Sign in</a>
+            </div>
+
           </div>
         </div>
       {% endif %}
