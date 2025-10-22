@@ -15,7 +15,7 @@ urlpatterns = [
     path('wishlist/', wishilst, name='wishlist'),
 
     # Chekout
-    path('chekout/', GetChekoutPageView.as_view(), name='chekout')
+    path('checkout/', GetChekoutPageView.as_view(), name='checkout')
 
  
 

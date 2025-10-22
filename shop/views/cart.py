@@ -34,6 +34,10 @@ class Cart:
     def get_count_items(self):
         return sum(self.cart.values())
     
+    def clear(self):
+        self.cart.clear()
+        self.session.modified = True
+    
     def get_products(self):
         products=[]
         total_with_discount = 0
