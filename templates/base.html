@@ -17,6 +17,77 @@
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
 
+<style>
+  #toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .toast {
+    background: #fff;
+    border-left: 5px solid #2563eb;
+    padding: 14px 18px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    animation: slideIn 0.4s ease, fadeOut 0.5s ease 4s forwards;
+    width: 320px;
+    max-width: 90vw;
+  }
+
+  .toast.success { border-left-color: #22c55e; }
+  .toast.error { border-left-color: #ef4444; }
+  .toast.warning { border-left-color: #facc15; }
+
+  .toast-content {
+    color: #111827;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+    word-break: break-all; /* <-- текст переносится даже без пробелов */
+    white-space: pre-wrap;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(100%); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes fadeOut {
+    to { opacity: 0; transform: translateX(100%); }
+  }
+  .toast {
+  background: #fff;
+  border-left: 5px solid #2563eb;
+  padding: 14px 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  animation: slideIn 0.4s ease, fadeOut 0.5s ease 4s forwards;
+  width: auto; /* было 320px — УБИРАЕМ фикс ширину */
+  max-width: 600px; /* можно до 90vw, если хочешь ещё шире */
+  max-height: none; /* чтобы не обрезался по высоте */
+  overflow: visible; /* чтобы ничего не скрывалось */
+  word-wrap: break-word;
+}
+
+.toast-content {
+  color: #111827;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+
+</style>
+
+
     <!--=============== CSS ===============-->
     <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}" />
 
@@ -44,7 +115,15 @@
           </div>
         </div>
       {% endif %}
-
+     {% if messages %}
+        <div id="toast-container" aria-live="polite" aria-atomic="true">
+          {% for message in messages %}
+            <div class="toast {{ message.tags }}">
+              <div class="toast-content">{{ message }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
       <nav class="nav container">
         <a href="{% url 'dashboard' %}" class="nav__logo">
           <img
@@ -137,7 +216,7 @@
           <div class="footer__social">
             <h4 class="footer__subtitle">Follow Me</h4>
             <div class="footer__links flex">
-              <a href="#">
+              <a href="">
                 <img
                   src="{% static "./assets/img/icon-facebook.svg" %}"
                   alt=""
@@ -189,11 +268,11 @@
         <div class="footer__content">
           <h3 class="footer__title">My Account</h3>
           <ul class="footer__links">
-            <li><a href="#" class="footer__link">Sign In</a></li>
-            <li><a href="#" class="footer__link">View Cart</a></li>
-            <li><a href="#" class="footer__link">My Wishlist</a></li>
+            <li><a href="{% url 'login' %}" class="footer__link">Sign In</a></li>
+            <li><a href="{% url 'cart_page' %}" class="footer__link">View Cart</a></li>
+            <li><a href="{% url 'wishlist' %}" class="footer__link">My Wishlist</a></li>
             <li><a href="#" class="footer__link">Track My Order</a></li>
-            <li><a href="#" class="footer__link">Help</a></li>
+            <li><a href="https://t.me/Alitop002" class="footer__link">Help</a></li>
             <li><a href="#" class="footer__link">Order</a></li>
           </ul>
         </div>
@@ -217,5 +296,40 @@
 
     <!--=============== MAIN JS ===============-->
     <script src="{% static "assets/js/main.js" %}"></script>
-  </body>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toasts = Array.from(document.querySelectorAll('#toast-container .toast'));
+    if (!toasts.length) return;
+
+    // покажем по очереди и автоудалим через 6 сек
+    toasts.forEach((toast, i) => {
+      // показываем с задержкой для аккуратной стопки
+      setTimeout(() => toast.classList.add('show'), 50 + i * 120);
+
+      // время видимости: 6000ms (6 секунд)
+      const hideAfter = 6000;
+
+      // автоскрытие
+      const timer = setTimeout(() => hideToast(toast), hideAfter);
+
+      // при наведении — остановить автоскрытие
+      toast.addEventListener('mouseenter', () => clearTimeout(timer));
+      // при уходе мыши — спрячем через 3 сек
+      toast.addEventListener('mouseleave', () => setTimeout(() => hideToast(toast), 3000));
+    });
+
+    function hideToast(el) {
+      el.classList.remove('show');
+      // удаляем из DOM после окончания перехода
+      el.addEventListener('transitionend', () => { if (el.parentNode) el.parentNode.removeChild(el); }, { once: true });
+    }
+  });
+</script>
+
+
+
+</body>
 </html>
+  
